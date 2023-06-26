@@ -95,8 +95,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $variants = Variant::all();
-        return view('products.edit', compact('variants'));
+        $variants = Variant::find($product->productVariants->pluck('variant_id'));
+
+        return view('products.edit', compact('variants', 'product'));
     }
 
     /**
