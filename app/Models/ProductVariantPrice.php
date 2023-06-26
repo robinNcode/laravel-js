@@ -29,5 +29,18 @@ class ProductVariantPrice extends Model
         return $this->hasOne(ProductVariant::class, 'id', 'product_variant_three');
     }
 
-
+    public function title(): string
+    {
+        $title = '';
+        if ($this->variantOne) {
+            $title .= $this->variantOne->variant;
+        }
+        if ($this->variantTwo) {
+            $title .= '/' . $this->variantTwo->variant;
+        }
+        if ($this->variantThree) {
+            $title .= '/' . $this->variantThree->variant;
+        }
+        return $title;
+    }
 }

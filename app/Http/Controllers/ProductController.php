@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductFilterRequest;
 use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
 use App\Models\Variant;
 use App\Services\ProductServices;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
@@ -16,6 +20,8 @@ class ProductController extends Controller
      * @var ProductServices
      */
     private $productService;
+
+    const PAGINATE_PER_PAGE = 5;
 
     /**
      * ProductController constructor.
@@ -25,20 +31,27 @@ class ProductController extends Controller
     {
         $this->productService = $productService;
     }
+
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
+     * Display a listing of the Products with full information ...
+     * @param ProductFilterRequest $request
+     * @return Application|Factory|View
      */
-    public function index()
+    public function index(ProductFilterRequest $request): View
     {
-        return view('products.index');
+        $variants = Variant::all();
+        $products = $this->productService
+            ->listProducts($request->validated())
+            ->paginate(self::PAGINATE_PER_PAGE);
+
+        return view('products.index', compact('variants', 'products'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
+     * @return Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function create()
     {

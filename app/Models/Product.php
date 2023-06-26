@@ -30,7 +30,6 @@ class Product extends Model
 
     /**
      * Return variant type this variant belongs
-     *
      * @return HasMany
      */
     public function productVariantPrices(): HasMany
