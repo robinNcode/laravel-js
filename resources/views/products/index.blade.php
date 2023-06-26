@@ -72,13 +72,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($products as $product)
+                    @foreach($products as $index => $product)
                         <tr>
                             <td>{{$loop->index + $products->firstItem()}}</td>
                             <td style="width: 10%;">{{$product->title}} <br> Created at : {{ $product->created_at}}</td>
                             <td style="width: 40%;">{{$product->description}}</td>
                             <td>
-                                <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
+                                <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant<?= $index ?>">
                                     @forelse($product->productVariantPrices as $productVariantPrice)
                                         <dt class="col-sm-3 pb-0">
                                             {{$productVariantPrice->title()}}
@@ -96,7 +96,7 @@
                                     @endforelse
                                 </dl>
                                 <button
-                                    onclick="$('#variant').toggleClass('h-auto')"
+                                    onclick="$('#variant' + `${<?= $index ?>}`).toggleClass('h-auto')"
                                     class="btn btn-sm btn-link">
                                     Show more
                                 </button>
