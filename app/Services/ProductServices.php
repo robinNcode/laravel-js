@@ -5,8 +5,10 @@ use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantPrice;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use function Symfony\Component\String\s;
 
 class ProductServices{
 
@@ -15,6 +17,50 @@ class ProductServices{
     public function __construct(Product $product)
     {
         $this->product = $product;
+    }
+
+    /**
+     * To list products with filter
+     * @param array $filters
+     * @return Builder
+     */
+    public function listProducts(array $filters = []): Builder
+    {
+        $query = $this->product->newQuery();
+        $query->select('products.*');
+
+        // Filtering by title
+        if (isset($filters['title']) && $filters['title']) {
+            $query->where('title', 'like', "%{$filters['title']}%");
+        }
+
+        // Filtering by variant
+        if (isset($filters['variant']) && $filters['variant']) {
+            $query->rightJoin('product_variants', 'products.id', '=', 'product_variants.product_id');
+            $query->where('variant', 'like', $filters['variant']);
+        }
+
+        // Filtering by price
+        if ((isset($filters['price_from']) && $filters['price_from'])
+            || (isset($filters['price_to']) && $filters['price_to'])) {
+
+            $query->leftJoin('product_variant_prices', 'products.id', '=', 'product_variant_prices.product_id');
+
+            if (isset($filters['price_from']) && $filters['price_from']) {
+                $query->where('price', '>=', (double)$filters['price_from']);
+            }
+
+            if (isset($filters['price_to']) && $filters['price_to']) {
+                $query->where('price', '<=',  (double)$filters['price_from']);
+            }
+        }
+
+        // Filtering by date
+        if (isset($filters['date']) && $filters['date']) {
+            $query->where(DB::raw('DATE(products.created_at)'), '=', $filters['date']);
+        }
+
+        return $query;
     }
 
     /**
