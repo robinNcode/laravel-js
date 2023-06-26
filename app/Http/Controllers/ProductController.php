@@ -42,7 +42,7 @@ class ProductController extends Controller
     {
         $variants = Variant::all();
         $products = $this->productService
-            ->listProducts($request->validated())
+            ->filterProducts($request->validated())
             ->paginate(self::PAGINATE_PER_PAGE);
 
         return view('products.index', compact('variants', 'products'));
