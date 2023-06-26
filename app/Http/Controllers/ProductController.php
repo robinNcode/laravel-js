@@ -109,7 +109,11 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        if ($this->productService->updateProduct($product->id, $request->validated())) {
+            return redirect()->route('product.edit', $product->id)->with('success', "Product updated successfully");
+        } else {
+            return redirect()->route('product.edit', $product->id)->with('error', "Product update failed");
+        }
     }
 
     /**

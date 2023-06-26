@@ -179,4 +179,14 @@ class ProductServices{
         Log::info("Data", $productVariantPriceArray);
         return $productVariantPriceArray;
     }
+
+    /**
+     * To update product details with product variant, variant price and product images ...
+     * @param array $validated
+     * @return Product
+     */
+    public function updateProduct(array $validated = []): Product
+    {
+        dd($validated);
+    }
 }
