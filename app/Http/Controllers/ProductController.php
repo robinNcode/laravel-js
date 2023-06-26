@@ -2,12 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
 use App\Models\Variant;
+use App\Services\ProductServices;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    /**
+     * @var ProductServices
+     */
+    private $productService;
+
+    /**
+     * ProductController constructor.
+     * @param ProductServices $productService
+     */
+    public function __construct(ProductServices $productService)
+    {
+        $this->productService = $productService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -32,12 +49,17 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param ProductStoreRequest $request
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request): RedirectResponse
     {
-
+        if ($this->productService->storeProduct($request->validated())) {
+            return redirect()->route('product.create')->with('success', "Product info added successfully!");
+        } else {
+            return redirect()->route('product.create')->with('error', "Product info addition failed!");
+        }
     }
 
 
