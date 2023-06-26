@@ -158,8 +158,8 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-lg btn-primary">Save</button>
-            <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
+            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+            <button type="reset" class="btn btn-secondary btn-lg">Cancel</button>
         </section>
     </form>
 @endsection

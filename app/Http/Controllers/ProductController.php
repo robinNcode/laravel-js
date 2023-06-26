@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductFilterRequest;
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use App\Models\Variant;
 use App\Services\ProductServices;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -51,7 +53,7 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function create()
     {
@@ -79,8 +81,8 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return Response
      */
     public function show($product)
     {
@@ -90,8 +92,8 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return Application|Factory|View
      */
     public function edit(Product $product)
     {
@@ -103,11 +105,12 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @param ProductUpdateRequest $request
+     * @param Product $product
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product): RedirectResponse
     {
         if ($this->productService->updateProduct($product->id, $request->validated())) {
             return redirect()->route('product.edit', $product->id)->with('success', "Product updated successfully");
@@ -119,8 +122,8 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return Response
      */
     public function destroy(Product $product)
     {

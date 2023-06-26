@@ -6,6 +6,8 @@ use App\Models\ProductVariant;
 use App\Models\ProductVariantPrice;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -177,12 +179,102 @@ class ProductServices{
     }
 
     /**
-     * To update product details with product variant, variant price and product images ...
-     * @param array $validated
-     * @return Product
+     * To show product details by $product_id
+     * @param $product_id
+     * @return Builder|Builder[]|Collection|Model|null
+     * @throws Exception
      */
-    public function updateProduct(array $validated = []): Product
+    public function showProductById($product_id)
     {
-        dd($validated);
+        try {
+            return $this->product::with([
+                'productVariants',
+                'productImages',
+                'productVariantPrices',
+                'productVariantPrices.variantOne',
+                'productVariantPrices.variantTwo',
+                'productVariantPrices.variantThree'
+            ])->findOrFail($product_id);
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage());
+        }
+    }
+
+    /**
+     * To update product details with product variant, variant price and product images ...
+     * @param int $id
+     * @param array $validated
+     * @return Builder|Builder[]|Collection|Model|null
+     * @throws Exception
+     */
+    public function updateProduct(int $id, array $validated = [])
+    {
+        $product = $this->showProductById($id);
+        $product->fill($validated);
+
+        // Transaction begins here ...
+        DB::beginTransaction();
+        try {
+            $product->save();
+            //
+            $validated['product_id'] = $product->id;
+
+            $this->removeOldVariants($product);
+
+            $productVariantArray = [];
+
+            foreach ($this->formatProductVariantInfo($validated) as $index => $singleProductVariant):
+                $productVariantArray[$index] = new ProductVariant($singleProductVariant);
+                $productVariantArray[$index]->save();
+            endforeach;
+
+            foreach ($this->formatProductVariantPriceInfo($validated, $productVariantArray) as $singleProductVariantPrice):
+                ProductVariantPrice::create($singleProductVariantPrice);
+            endforeach;
+
+            if (isset($validated['document'])) {
+                if (count($product->productImages) > 0) {
+                    foreach ($product->productImages as $media) {
+                        if (!in_array($media->file_path, $validated['document'])) {
+                            $media->delete();
+                        }
+                    }
+                }
+
+                $media = $product->productImages->pluck('file_path')->toArray();
+
+                foreach ($validated['document'] as $file) {
+                    if (count($media) === 0 || !in_array($file, $media)) {
+                        ProductImage::create([
+                            'product_id' => $product->id,
+                            'file_path' => 'tmp/uploads/' . $file
+                        ]);
+                    }
+                }
+            }
+
+            $product->refresh();
+            DB::commit();
+            return $product;
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw new Exception($exception->getMessage());
+        }
+    }
+
+    /**
+     * To delete product's old variants and variant prices ...
+     * @param $product
+     * @return void
+     */
+    private function removeOldVariants($product)
+    {
+        foreach ($product->productVariantPrices as $temp){
+            $temp->delete();
+        }
+
+        foreach ($product->productVariants as $temp){
+            $temp->delete();
+        }
     }
 }
