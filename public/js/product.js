@@ -1,20 +1,11 @@
-var currentIndex = 0;
+var currentIndex = $("#variant-sections").children().length;
 
 var indexs = [];
 
 $(document).ready(function () {
-    addVariantTemplate();
-    $("#file-upload").dropzone({
-        url: "{{ route('file-upload') }}",
-        method: "post",
-        addRemoveLinks: true,
-        success: function (file, response) {
-            //
-        },
-        error: function (file, response) {
-            //
-        }
-    });
+    if ($("#variant-sections").children().length < 1) {
+        addVariantTemplate();
+    }
 });
 
 function addVariant(event) {
@@ -51,14 +42,14 @@ function updateVariantPreview() {
     $(variantPreviewArray).each(function (index, element) {
         tableBody += `<tr>
                         <th>
-                                        <input type="hidden" name="product_preview[${index}][variant]" value="${element}">
+                                        <input type="hidden" name="product_variant_prices[${index}][title]" value="${element}">
                                         <span class="font-weight-bold">${element}</span>
                                     </th>
                         <td>
-                                        <input type="text" class="form-control" value="0" name="product_preview[${index}][price]" required>
+                                        <input type="text" class="form-control" value="0" name="product_variant_prices[${index}][price]" required>
                                     </td>
                         <td>
-                                        <input type="text" class="form-control" value="0" name="product_preview[${index}][stock]">
+                                        <input type="text" class="form-control" value="0" name="product_variant_prices[${index}][stock]">
                                     </td>
                       </tr>`;
     });
@@ -67,7 +58,6 @@ function updateVariantPreview() {
 }
 
 function addVariantTemplate() {
-
     $("#variant-sections").append(`<div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -91,7 +81,7 @@ function addVariantTemplate() {
                                             <span>Value</span>
                                             <a href="#" class="remove-btn" data-index="${currentIndex}" onclick="removeVariant(event, this);">Remove</a>
                                         </label>
-                                        <select id="select2-value-${currentIndex}" data-index="${currentIndex}" name="product_variant[${currentIndex}][value][]" class="select2 select2-value form-control custom-select" multiple="multiple">
+                                        <select id="select2-value-${currentIndex}" data-index="${currentIndex}" name="product_variant[${currentIndex}][variant][]" class="select2 select2-value form-control custom-select" multiple="multiple">
                                         </select>
                                     </div>
                                 </div>
@@ -143,4 +133,3 @@ function removeVariant(event, element) {
 
     updateVariantPreview();
 }
-
