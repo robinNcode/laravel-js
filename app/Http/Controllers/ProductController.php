@@ -24,7 +24,7 @@ class ProductController extends Controller
      */
     private $productService;
 
-    const PAGINATE_PER_PAGE = 5;
+    const PAGINATE_PER_PAGE = 10;
 
     /**
      * ProductController constructor.
@@ -76,18 +76,6 @@ class ProductController extends Controller
         } else {
             return redirect()->route('product.create')->with('error', "Product info addition failed!");
         }
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param Product $product
-     * @return Response
-     */
-    public function show($product)
-    {
-
     }
 
     /**

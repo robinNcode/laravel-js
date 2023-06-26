@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb5
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Sep 01, 2020 at 05:56 AM
--- Server version: 5.7.31-0ubuntu0.18.04.1
--- PHP Version: 7.3.21-1+ubuntu18.04.1+deb.sury.org+1
+-- Host: localhost
+-- Generation Time: Jun 26, 2023 at 02:33 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 7.4.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -46,7 +47,7 @@ CREATE TABLE `blog_categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -77,7 +78,7 @@ CREATE TABLE `failed_jobs` (
   `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -132,7 +133,7 @@ CREATE TABLE `products` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `sku` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -148,7 +149,10 @@ INSERT INTO `products` (`id`, `title`, `sku`, `description`, `created_at`, `upda
 (4, 'Product Four', 'afdafdfasdfasasdfadsf', 'adsfadft is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)', '2020-08-31 10:21:44', '2020-08-31 10:21:44'),
 (5, 'T-Shirt', 't-shirt', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)', '2020-08-31 10:37:15', '2020-08-31 10:37:15'),
 (6, 'T-Shirt RED', 't-shirt-red', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)', '2020-08-31 10:38:17', '2020-08-31 10:38:17'),
-(7, 'Formal Shirt', 'formal-shirt', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)', '2020-08-31 10:38:39', '2020-08-31 10:38:39');
+(7, 'Formal Shirt', 'formal-shirt', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)', '2020-08-31 10:38:39', '2020-08-31 10:38:39'),
+(10, 'Pran Frooto', 'frooto1ltrbottle', '100% natural pulp fruit juice in the flavors of mango. Pran frooto Mango drink contains over 20 different vitamins and minerals. Update Operation test', '2023-06-26 01:02:03', '2023-06-26 04:59:31'),
+(11, 'GFC Fan (white)', 'fangfc', 'Made in Bangladesh. Update test', '2023-06-26 05:06:34', '2023-06-26 06:16:23'),
+(12, 'Curren Watch Golden', 'watch#313', 'Update version of 2023', '2023-06-26 06:21:44', '2023-06-26 06:23:23');
 
 -- --------------------------------------------------------
 
@@ -164,6 +168,14 @@ CREATE TABLE `product_images` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_images`
+--
+
+INSERT INTO `product_images` (`id`, `product_id`, `file_path`, `thumbnail`, `created_at`, `updated_at`) VALUES
+(1, 11, 'tmp/uploads/649971367c4a2_gfc_fan.png', NULL, '2023-06-26 05:06:34', '2023-06-26 05:06:34'),
+(3, 12, 'tmp/uploads/6499833a8d1fb_currenmenswatch-217_650x.png', NULL, '2023-06-26 06:23:23', '2023-06-26 06:23:23');
 
 -- --------------------------------------------------------
 
@@ -230,7 +242,15 @@ INSERT INTO `product_variants` (`id`, `variant`, `variant_id`, `product_id`, `cr
 (43, 'l', 2, 7, '2020-08-31 10:38:39', '2020-08-31 10:38:39'),
 (44, 'm', 2, 7, '2020-08-31 10:38:39', '2020-08-31 10:38:39'),
 (45, 'v-nick', 6, 7, '2020-08-31 10:38:39', '2020-08-31 10:38:39'),
-(46, 'o-nick', 6, 7, '2020-08-31 10:38:39', '2020-08-31 10:38:39');
+(46, 'o-nick', 6, 7, '2020-08-31 10:38:39', '2020-08-31 10:38:39'),
+(49, 'yellow', 1, 10, '2023-06-26 04:59:32', '2023-06-26 04:59:32'),
+(50, '1ltr', 2, 10, '2023-06-26 04:59:32', '2023-06-26 04:59:32'),
+(51, 'bottle', 6, 10, '2023-06-26 04:59:32', '2023-06-26 04:59:32'),
+(54, 'white', 1, 11, '2023-06-26 06:16:23', '2023-06-26 06:16:23'),
+(55, '3blade', 2, 11, '2023-06-26 06:16:23', '2023-06-26 06:16:23'),
+(58, 'golden', 1, 12, '2023-06-26 06:23:23', '2023-06-26 06:23:23'),
+(59, 'royal', 6, 12, '2023-06-26 06:23:23', '2023-06-26 06:23:23'),
+(60, 'blue', 1, 12, '2023-06-26 06:23:23', '2023-06-26 06:23:23');
 
 -- --------------------------------------------------------
 
@@ -244,7 +264,7 @@ CREATE TABLE `product_variant_prices` (
   `product_variant_two` bigint(20) UNSIGNED DEFAULT NULL,
   `product_variant_three` bigint(20) UNSIGNED DEFAULT NULL,
   `price` double NOT NULL,
-  `stock` int(11) NOT NULL DEFAULT '0',
+  `stock` int(11) NOT NULL DEFAULT 0,
   `product_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -329,7 +349,10 @@ INSERT INTO `product_variant_prices` (`id`, `product_variant_one`, `product_vari
 (72, 2, 8, 17, 0, 0, 7, '2020-08-31 10:38:40', '2020-08-31 10:38:40'),
 (73, 2, 8, 18, 0, 0, 7, '2020-08-31 10:38:40', '2020-08-31 10:38:40'),
 (74, 2, 6, 17, 0, 0, 7, '2020-08-31 10:38:40', '2020-08-31 10:38:40'),
-(75, 2, 6, 18, 0, 0, 7, '2020-08-31 10:38:40', '2020-08-31 10:38:40');
+(75, 2, 6, 18, 0, 0, 7, '2020-08-31 10:38:40', '2020-08-31 10:38:40'),
+(77, 49, 50, 51, 77, 12, 10, '2023-06-26 04:59:32', '2023-06-26 04:59:32'),
+(79, 54, 55, NULL, 2500, 5, 11, '2023-06-26 06:16:23', '2023-06-26 06:16:23'),
+(81, 58, 59, 60, 6000, 5, 12, '2023-06-26 06:23:23', '2023-06-26 06:23:23');
 
 -- --------------------------------------------------------
 
@@ -353,7 +376,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@example.com', NULL, '$2y$10$NfLWLL9Mj6dCi0fQ3TBqWO53ZFsDlGUZmFl.gILMhHDHVi34XwWKW', NULL, '2020-08-28 00:03:42', '2020-08-28 00:03:42');
+(1, 'Admin', 'admin@example.com', NULL, '$2a$12$l7f62OvmlsdDH1QJcBATnucx7tdFzhGHO.AkfG8MMyUV3lCo1nu/K', NULL, '2020-08-28 00:03:42', '2020-08-28 00:03:42');
 
 -- --------------------------------------------------------
 
@@ -364,7 +387,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 CREATE TABLE `variants` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -476,56 +499,67 @@ ALTER TABLE `variants`
 --
 ALTER TABLE `blogs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `blog_categories`
 --
 ALTER TABLE `blog_categories`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `blog_tags`
 --
 ALTER TABLE `blog_tags`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT for table `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+
 --
 -- AUTO_INCREMENT for table `product_variant_prices`
 --
 ALTER TABLE `product_variant_prices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `variants`
 --
 ALTER TABLE `variants`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- Constraints for dumped tables
 --
@@ -563,6 +597,7 @@ ALTER TABLE `product_variant_prices`
   ADD CONSTRAINT `product_variant_prices_product_variant_one_foreign` FOREIGN KEY (`product_variant_one`) REFERENCES `product_variants` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `product_variant_prices_product_variant_three_foreign` FOREIGN KEY (`product_variant_three`) REFERENCES `product_variants` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `product_variant_prices_product_variant_two_foreign` FOREIGN KEY (`product_variant_two`) REFERENCES `product_variants` (`id`) ON DELETE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
