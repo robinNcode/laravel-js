@@ -48,16 +48,9 @@
                             </div>
                         </div>
                     </div>
-                    <!--                    Media-->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"><h6
-                                class="m-0 font-weight-bold text-primary">Media</h6></div>
-                        <div class="card-body border">
-                            <div id="file-upload" class="dropzone dz-clickable">
-                                <div class="dz-default dz-message"><span>Drop files here to upload</span></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="file-upload" class="dropzone dz-clickable"
+                         data-existing-images="{{ $product->productImages->count() > 0 ? 'true' : 'false' }}"></div>
+
                 </div>
                 <!--                Variants-->
                 <div class="col-md-6">
@@ -195,10 +188,17 @@
 
                 for (var i in files) {
                     var file = files[i];
+
                     this.options.addedfile.call(this, file)
-                    file.previewElement.classList.add('dz-complete')
-                    $('form').append(`<input type="hidden" name="document[]" value="${file.file_name}">`)
+                    file.previewElement.classList.add('dz-complete');
+                    $('form').append(`<input type="hidden" name="document[]" value="${file.file_name}">`);
+
+                    let imgTag = $(file.previewElement).find('.dz-image').children();
+                    let imgPath = '{{ url('/') }}' + '/' + file.file_path;
+
+                    imgTag.attr('src', imgPath);
                 }
+
                 @endif
             }
         });

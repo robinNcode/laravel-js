@@ -11,6 +11,7 @@ use App\Services\ProductServices;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -98,6 +99,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $variants = Variant::find($product->productVariants->pluck('variant_id'));
+        $product->productImages->pluck('file_path'); // to get images
 
         return view('products.edit', compact('variants', 'product'));
     }
@@ -119,14 +121,23 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Product $product
-     * @return Response
-     */
-    public function destroy(Product $product)
+    public function storeMedia(Request $request): JsonResponse
     {
-        //
+        $path = public_path('tmp/uploads');
+
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $file = $request->file('file');
+
+        $name = uniqid() . '_' . trim($file->getClientOriginalName());
+
+        $file->move($path, $name);
+
+        return response()->json([
+            'name' => $name,
+            'original_name' => $file->getClientOriginalName(),
+        ]);
     }
 }
