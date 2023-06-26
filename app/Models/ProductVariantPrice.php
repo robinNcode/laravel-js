@@ -28,4 +28,6 @@ class ProductVariantPrice extends Model
     {
         return $this->hasOne(ProductVariant::class, 'id', 'product_variant_three');
     }
+
+
 }

@@ -6,19 +6,6 @@ $(document).ready(function () {
     if ($("#variant-sections").children().length < 1) {
         addVariantTemplate();
     }
-    // $("#file-upload").dropzone({
-    //     url: `${window.location.origin}/dropzone`,
-    //     method: "post",
-    //     addRemoveLinks: true,
-    //     success: function (file, response) {
-    //         console.log("success:", file);
-    //         console.log("success:", response);
-    //     },
-    //     error: function (file, response) {
-    //         console.log("error", file);
-    //         console.log("error", response);
-    //     }
-    // });
 });
 
 function addVariant(event) {
